@@ -79,3 +79,41 @@ func RemoveNthLastNode(head *structs.ListNode, n int) *structs.ListNode {
 	// Return the original head as it wasn't removed
 	return head
 }
+
+// SortColors sorts the array in place so that the elements of the same color are adjacent.
+// And the final order is: red (0), then white (1), and then blue (2).
+func SortColors(colors []int) []int {
+	// mark for the next index to store red (0) element
+	redPartitionIndex := 0
+	// mark for the next index to store blue (2) element
+	bluePartitionIndex := len(colors) - 1
+
+	// example
+	// 0, 0, 1 (current, redPartitionIndex), 2, 0, 1 (bluePartitionIndex), 2, 2, 2
+
+	// iterate until current pointer exceeds the bluePartitionIndex pointer
+	current := 0
+	for current <= bluePartitionIndex {
+		switch colors[current] {
+		case 0:
+			// if the current element is red (0), then swap the element with the red partition index
+			// this ensured that red elements is placed at the beginning of the array
+			colors[current], colors[redPartitionIndex] = colors[redPartitionIndex], colors[current]
+			// move the current and red partition index pointers one position forward
+			current++
+			redPartitionIndex++
+		case 1:
+			// if the current element is white (1), then just move the current pointer one position forward
+			// the white (1) elements is placed at the middle of the array
+			current++
+		case 2:
+			// if the current element is blue (2), then swap the element with the blue partition index
+			// this ensured that blue elements is placed at the end of the array
+			colors[current], colors[bluePartitionIndex] = colors[bluePartitionIndex], colors[current]
+			// move the blue partition index pointer one position backward
+			bluePartitionIndex--
+		}
+	}
+
+	return colors
+}

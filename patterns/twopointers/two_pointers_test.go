@@ -1,6 +1,7 @@
 package twopointers_test
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/adyanf/go-dsa-patterns/patterns/twopointers"
@@ -60,6 +61,48 @@ func TestRemoveNthLastNode(t *testing.T) {
 
 		if llResult.String() != llExpected.String() {
 			t.Errorf("RemoveNthLastNode(%v, %v) = %v, expected %v", tc.nums, tc.delete, llResult.String(), llExpected.String())
+		}
+	}
+}
+
+func TestSortColors(t *testing.T) {
+	testCases := []struct {
+		name     string
+		nums     []int
+		expected []int
+	}{
+		{
+			name:     "Case 1",
+			nums:     []int{0, 1, 0},
+			expected: []int{0, 0, 1},
+		},
+		{
+			name:     "Case 2",
+			nums:     []int{1},
+			expected: []int{1},
+		},
+		{
+			name:     "Case 3",
+			nums:     []int{2, 2},
+			expected: []int{2, 2},
+		},
+		{
+			name:     "Case 4",
+			nums:     []int{1, 1, 0, 2},
+			expected: []int{0, 1, 1, 2},
+		},
+		{
+			name:     "Case 5",
+			nums:     []int{2, 1, 1, 0, 0},
+			expected: []int{0, 0, 1, 1, 2},
+		},
+	}
+
+	for _, tc := range testCases {
+		twopointers.SortColors(tc.nums)
+
+		if !reflect.DeepEqual(tc.nums, tc.expected) {
+			t.Errorf("SortColors(%v) = %v, expected %v", tc.nums, tc.nums, tc.expected)
 		}
 	}
 }
