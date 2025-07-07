@@ -106,3 +106,45 @@ func TestSortColors(t *testing.T) {
 		}
 	}
 }
+
+func TestReverseWords(t *testing.T) {
+	testCases := []struct {
+		name     string
+		sentence string
+		expected string
+	}{
+		{
+			name:     "Case 1",
+			sentence: "We love Python ",
+			expected: "Python love We",
+		},
+		{
+			name:     "Case 2",
+			sentence: "1234 abc XYZ",
+			expected: "XYZ abc 1234",
+		},
+		{
+			name:     "Case 3",
+			sentence: "You are amazing",
+			expected: "amazing are You",
+		},
+		{
+			name:     "Case 4",
+			sentence: "Hello     World",
+			expected: "World Hello",
+		},
+		{
+			name:     "Case 5",
+			sentence: "   Greeting123   ",
+			expected: "Greeting123",
+		},
+	}
+
+	for _, tc := range testCases {
+		got := twopointers.ReverseWords(tc.sentence)
+
+		if got != tc.expected {
+			t.Errorf("ReverseWords(%v) = %v, expected %v", tc.sentence, got, tc.expected)
+		}
+	}
+}

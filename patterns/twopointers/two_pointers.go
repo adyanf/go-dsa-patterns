@@ -1,6 +1,10 @@
 package twopointers
 
-import "github.com/adyanf/go-dsa-patterns/structs"
+import (
+	"strings"
+
+	"github.com/adyanf/go-dsa-patterns/structs"
+)
 
 /*
 Two Pointers Pattern
@@ -116,4 +120,21 @@ func SortColors(colors []int) []int {
 	}
 
 	return colors
+}
+
+// ReverseWords reverses he order of its words without affecting the order of letters within the given word
+func ReverseWords(sentence string) string {
+	// get the list of words
+	words := strings.Fields(sentence)
+
+	// reverse the words using two pointers
+	left, right := 0, len(words)-1
+	for left < right {
+		words[left], words[right] = words[right], words[left]
+		left++
+		right--
+	}
+
+	// join the words to create reversed sentence with a single whitespace
+	return strings.Join(words, " ")
 }
