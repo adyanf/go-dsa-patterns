@@ -1,5 +1,7 @@
 package fastslowpointers
 
+import "github.com/adyanf/go-dsa-patterns/structs"
+
 /*
 The Fast & Slow Pointers pattern, also known as the Hare & Tortoise algorithm,
 is a common technique used to solve problems involving linked lists, arrays, or
@@ -124,4 +126,35 @@ func isInvalidCycle(nums []int, prevDirection bool, current int) bool {
 		return true
 	}
 	return false
+}
+
+// CountCycleLength returns the length of a cycle in a linked list
+func CountCycleLength(head *structs.ListNode) int {
+	// start fast and slow pointers from the linked list head
+	slow, fast := head, head
+
+	// iterate through the linked list until the nil node found
+	for fast != nil && fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+
+		// if fast and slow pointers meets in the intersection then the linked list contains cycle
+		if slow == fast {
+			// move the slow pointer by one to start counting the cycle length
+			slow = slow.Next
+			length := 1
+
+			// iterate until it meets the fast pointer in the intersection point
+			for slow != fast {
+				slow = slow.Next
+				length++
+			}
+
+			// the total step from the slow pointer until it meets the fast pointer again is the length of the cycle
+			return length
+		}
+	}
+
+	// if the end of linked list found then return 0 because the linked list didn't contains cycle
+	return 0
 }

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/adyanf/go-dsa-patterns/patterns/fastslowpointers"
+	"github.com/adyanf/go-dsa-patterns/structs"
 )
 
 func TestFindDuplicate(t *testing.T) {
@@ -91,6 +92,58 @@ func TestCircularArrayLoop(t *testing.T) {
 
 		if got != tc.expected {
 			t.Errorf("CircularArrayLoop(%v) = %v, expected %v", tc.nums, got, tc.expected)
+		}
+	}
+}
+
+func TestCountCycleLength(t *testing.T) {
+	testCases := []struct {
+		name       string
+		nums       []int
+		cycleEntry int
+		expected   int
+	}{
+		{
+			name:       "Case 1",
+			nums:       []int{2, 4, 6, 8, 10},
+			cycleEntry: 2,
+			expected:   3,
+		},
+		{
+			name:       "Case 2",
+			nums:       []int{1, 3, 5, 7, 9},
+			cycleEntry: -1,
+			expected:   0,
+		},
+		{
+			name:       "Case 3",
+			nums:       []int{1, 2, 3, 4, 5},
+			cycleEntry: 3,
+			expected:   2,
+		},
+		{
+			name:       "Case 4",
+			nums:       []int{0, 2, 3, 5, 6},
+			cycleEntry: -1,
+			expected:   0,
+		},
+		{
+			name:       "Case 5",
+			nums:       []int{3, 6, 9, 10, 11},
+			cycleEntry: 0,
+			expected:   5,
+		},
+	}
+
+	for _, tc := range testCases {
+		ll := &structs.LinkedList{}
+		ll.CreateLinkedList(tc.nums)
+		ll.CreateCycleOnTail(tc.cycleEntry)
+
+		got := fastslowpointers.CountCycleLength(ll.Head)
+
+		if got != tc.expected {
+			t.Errorf("CountCycleLength(%v, %v) = %v, expected %v", tc.nums, tc.cycleEntry, got, tc.expected)
 		}
 	}
 }

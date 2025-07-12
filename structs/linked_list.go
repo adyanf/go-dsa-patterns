@@ -58,14 +58,45 @@ func (l *LinkedList) CreateLinkedList(lst []int) {
 	}
 }
 
+// CreateCycleOnTail method will create a cycle in the linked list from the tail to the given cycle entry node.
+func (l *LinkedList) CreateCycleOnTail(cycleEntry int) {
+	if cycleEntry == -1 {
+		return
+	}
+
+	if l.Head == nil {
+		return
+	}
+
+	var cycleEntryNode *ListNode
+
+	node := l.Head
+	for range cycleEntry {
+		node = node.Next
+	}
+	cycleEntryNode = node
+
+	node = l.Head
+	for node.Next != nil {
+		node = node.Next
+	}
+	node.Next = cycleEntryNode
+}
+
 // DisplayLinkedList method will display the elements of linked list.
 func (l *LinkedList) DisplayLinkedList() {
-	temp := l.Head
+	nodeVisited := make(map[*ListNode]bool)
+
+	curr := l.Head
 	fmt.Print("[")
-	for temp != nil {
-		fmt.Print(temp.Val)
-		temp = temp.Next
-		if temp != nil {
+	for curr != nil {
+		fmt.Print(curr.Val)
+		nodeVisited[curr] = true
+		curr = curr.Next
+		if nodeVisited[curr] {
+			break
+		}
+		if curr != nil {
 			fmt.Print(", ")
 		}
 	}
@@ -73,12 +104,18 @@ func (l *LinkedList) DisplayLinkedList() {
 }
 
 func (l *LinkedList) String() string {
+	nodeVisited := make(map[*ListNode]bool)
+
 	str := "["
-	temp := l.Head
-	for temp != nil {
-		str += fmt.Sprintf("%d", temp.Val)
-		temp = temp.Next
-		if temp != nil {
+	curr := l.Head
+	for curr != nil {
+		str += fmt.Sprintf("%d", curr.Val)
+		nodeVisited[curr] = true
+		curr = curr.Next
+		if nodeVisited[curr] {
+			break
+		}
+		if curr != nil {
 			str += ", "
 		}
 	}
