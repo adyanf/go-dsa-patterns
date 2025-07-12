@@ -53,7 +53,7 @@ func FindLongestSubstring(str string) int {
 	windowStart, windowEnd, longest := 0, 0, 0
 	lastSeenAt := make(map[byte]int)
 
-	// iterate until window end equal to length of str
+	// iterate until window end equal to length of input string
 	for windowEnd < len(str) {
 		// if the element in window end already appeared in current window then move the window start to last seen at + 1
 		if lastSeenIdx, ok := lastSeenAt[str[windowEnd]]; ok && lastSeenIdx >= windowStart {
@@ -71,4 +71,38 @@ func FindLongestSubstring(str string) int {
 	}
 
 	return longest
+}
+
+// LongestRepeatingCharacterReplacement finds the longest repeating characters from s with max k replements.
+func LongestRepeatingCharacterReplacement(s string, k int) int {
+	// initiate the window start, window end, length of max substring, char frequency map and most frequent char
+	windowStart, windowEnd, lengthOfMaxSubstring := 0, 0, 0
+	charFreq := make(map[byte]int)
+	mostFreqChar := 0
+
+	// iterate until window end equal to length of input string
+	for windowEnd < len(s) {
+		// increment the char frequency of character of window end
+		charFreq[s[windowEnd]]++
+		// update most frequent char based on previous most frequent char and char frequency of char in window end
+		mostFreqChar = max(mostFreqChar, charFreq[s[windowEnd]])
+
+		// calculate window length
+		windowLength := windowEnd - windowStart + 1
+		// if window length - most frequency char is more than k, means too many char need to be replaced
+		// then increment the window start and update the window length
+		if windowLength-mostFreqChar > k {
+			charFreq[s[windowStart]]--
+			windowStart++
+			windowLength = windowEnd - windowStart + 1
+		}
+
+		// recalculate the length of max substring
+		lengthOfMaxSubstring = max(lengthOfMaxSubstring, windowLength)
+
+		// increment the window end
+		windowEnd++
+	}
+
+	return lengthOfMaxSubstring
 }

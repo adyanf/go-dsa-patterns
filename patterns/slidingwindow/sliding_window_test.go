@@ -47,3 +47,51 @@ func TestFindLongestSubstring(t *testing.T) {
 		}
 	}
 }
+
+func TestLongestRepeatingCharacterReplacement(t *testing.T) {
+	testCases := []struct {
+		name     string
+		s        string
+		k        int
+		expected int
+	}{
+		{
+			name:     "Case 1",
+			s:        "aaacbbbaabab",
+			k:        2,
+			expected: 6,
+		},
+		{
+			name:     "Case 2",
+			s:        "aaacbbbaabab",
+			k:        1,
+			expected: 4,
+		},
+		{
+			name:     "Case 3",
+			s:        "dippitydip",
+			k:        4,
+			expected: 6,
+		},
+		{
+			name:     "Case 4",
+			s:        "coollooc",
+			k:        2,
+			expected: 6,
+		},
+		{
+			name:     "Case 5",
+			s:        "aaaaaaaaaa",
+			k:        2,
+			expected: 10,
+		},
+	}
+
+	for _, tc := range testCases {
+		got := slidingwindow.LongestRepeatingCharacterReplacement(tc.s, tc.k)
+
+		if got != tc.expected {
+			t.Errorf("LongestRepeatingCharacterReplacement(%v, %v) = %v, expected %v", tc.s, tc.k, got, tc.expected)
+		}
+	}
+}
