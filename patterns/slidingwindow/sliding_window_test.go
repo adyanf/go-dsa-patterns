@@ -153,7 +153,7 @@ func TestFindRepeatedDnaSequences(t *testing.T) {
 	}
 }
 
-func TestFindRepeatedDnaSequencesKMPAlgorithm(t *testing.T) {
+func TestFindRepeatedDnaSequencesWithRollingHash(t *testing.T) {
 	testCases := []struct {
 		name     string
 		s        string
@@ -199,7 +199,7 @@ func TestFindRepeatedDnaSequencesKMPAlgorithm(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		got := slidingwindow.FindRepeatedDnaSequencesKMPAlgorithm(tc.s)
+		got := slidingwindow.FindRepeatedDnaSequencesWithRollingHash(tc.s)
 
 		for _, value := range got {
 			if !tc.expected[value] {

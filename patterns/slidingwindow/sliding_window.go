@@ -133,8 +133,8 @@ func FindRepeatedDnaSequences(s string) []string {
 	return result
 }
 
-// FindRepeatedDnaSequencesKMPAlgorithm return all the 10-letter-long sequences that appear more than once in input string using KMP algorithm
-func FindRepeatedDnaSequencesKMPAlgorithm(s string) []string {
+// FindRepeatedDnaSequencesWithRollingHash return all the 10-letter-long sequences that appear more than once in input string using rolling hash
+func FindRepeatedDnaSequencesWithRollingHash(s string) []string {
 	// encode the string into int
 	toInt := map[rune]int{'A': 0, 'C': 1, 'G': 2, 'T': 3}
 	encodedSequence := make([]int, len(s))
