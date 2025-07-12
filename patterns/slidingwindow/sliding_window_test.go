@@ -95,3 +95,117 @@ func TestLongestRepeatingCharacterReplacement(t *testing.T) {
 		}
 	}
 }
+
+func TestFindRepeatedDnaSequences(t *testing.T) {
+	testCases := []struct {
+		name     string
+		s        string
+		expected map[string]bool
+	}{
+		{
+			name: "Case 1",
+			s:    "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT",
+			expected: map[string]bool{
+				"AAAAACCCCC": true,
+				"CCCCCAAAAA": true,
+			},
+		},
+		{
+			name: "Case 2",
+			s:    "AAAAAAAAAAAAA",
+			expected: map[string]bool{
+				"AAAAAAAAAA": true,
+			},
+		},
+		{
+			name: "Case 3",
+			s:    "ACGTACGTACGTACGTACGTACGTACGTACGT",
+			expected: map[string]bool{
+				"ACGTACGTAC": true,
+				"CGTACGTACG": true,
+				"GTACGTACGT": true,
+				"TACGTACGTA": true,
+			},
+		},
+		{
+			name: "Case 4",
+			s:    "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+			expected: map[string]bool{
+				"GGGGGGGGGG": true,
+			},
+		},
+		{
+			name:     "Case 5",
+			s:        "GTACGTACGTACGCCCCCCCCGGGGG",
+			expected: map[string]bool{},
+		},
+	}
+
+	for _, tc := range testCases {
+		got := slidingwindow.FindRepeatedDnaSequences(tc.s)
+
+		for _, value := range got {
+			if !tc.expected[value] {
+				t.Errorf("FindRepeatedDnaSequences(%v) = %v, expected %v", tc.s, got, tc.expected)
+				break
+			}
+		}
+	}
+}
+
+func TestFindRepeatedDnaSequencesKMPAlgorithm(t *testing.T) {
+	testCases := []struct {
+		name     string
+		s        string
+		expected map[string]bool
+	}{
+		{
+			name: "Case 1",
+			s:    "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT",
+			expected: map[string]bool{
+				"AAAAACCCCC": true,
+				"CCCCCAAAAA": true,
+			},
+		},
+		{
+			name: "Case 2",
+			s:    "AAAAAAAAAAAAA",
+			expected: map[string]bool{
+				"AAAAAAAAAA": true,
+			},
+		},
+		{
+			name: "Case 3",
+			s:    "ACGTACGTACGTACGTACGTACGTACGTACGT",
+			expected: map[string]bool{
+				"ACGTACGTAC": true,
+				"CGTACGTACG": true,
+				"GTACGTACGT": true,
+				"TACGTACGTA": true,
+			},
+		},
+		{
+			name: "Case 4",
+			s:    "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+			expected: map[string]bool{
+				"GGGGGGGGGG": true,
+			},
+		},
+		{
+			name:     "Case 5",
+			s:        "GTACGTACGTACGCCCCCCCCGGGGG",
+			expected: map[string]bool{},
+		},
+	}
+
+	for _, tc := range testCases {
+		got := slidingwindow.FindRepeatedDnaSequencesKMPAlgorithm(tc.s)
+
+		for _, value := range got {
+			if !tc.expected[value] {
+				t.Errorf("FindRepeatedDnaSequencesKMPAlgorithm(%v) = %v, expected %v", tc.s, got, tc.expected)
+				break
+			}
+		}
+	}
+}

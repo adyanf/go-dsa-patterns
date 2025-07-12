@@ -106,3 +106,80 @@ func LongestRepeatingCharacterReplacement(s string, k int) int {
 
 	return lengthOfMaxSubstring
 }
+
+// FindRepeatedDnaSequences return all the 10-letter-long sequences that appear more than once in input string
+func FindRepeatedDnaSequences(s string) []string {
+	// initiate window start, window end and sequence frequency map
+	windowStart, windowEnd := 0, 10
+	sequenceFreq := make(map[string]int)
+
+	// iterate until window end equal to length of input string
+	for windowEnd < len(s) {
+		// add sequence from window start to window end to sequence frequency map
+		sequenceFreq[s[windowStart:windowEnd]]++
+		// move the sliding window forward
+		windowStart++
+		windowEnd++
+	}
+
+	// add sequence with more than once occurence to the result list
+	var result []string
+	for key, value := range sequenceFreq {
+		if value > 1 {
+			result = append(result, key)
+		}
+	}
+
+	return result
+}
+
+// FindRepeatedDnaSequencesKMPAlgorithm return all the 10-letter-long sequences that appear more than once in input string using KMP algorithm
+func FindRepeatedDnaSequencesKMPAlgorithm(s string) []string {
+	// encode the string into int
+	toInt := map[rune]int{'A': 0, 'C': 1, 'G': 2, 'T': 3}
+	encodedSequence := make([]int, len(s))
+	for i, c := range s {
+		encodedSequence[i] = toInt[c]
+	}
+
+	sequenceLength, stringLength := 10, len(s)
+	// if length of input string less or equal to k then return empty array since duplicate is impossible
+	if stringLength <= sequenceLength {
+		return []string{}
+	}
+
+	// init the variable for calculating hash
+	numOfUniqueChar, calculatedHash := 4, 0
+	numOfUniqueCharToThePowerOfK := 1
+	seenHashes := make(map[int]bool)
+	output := make(map[string]bool)
+
+	// calculate the first hash from first sequence with k length
+	for i := range sequenceLength {
+		calculatedHash = calculatedHash*numOfUniqueChar + encodedSequence[i]
+		numOfUniqueCharToThePowerOfK *= numOfUniqueChar
+	}
+	seenHashes[calculatedHash] = true
+
+	// iterate from start = 1 until end = len(s)
+	for start := 1; start <= stringLength-sequenceLength; start++ {
+		// recalculate hash by rolling hash, remove the hash contribution of the outgoing character and add the hash contribution of the incoming character
+		// new hash = (old hash × 4) − (leftmost digit × 4^10) + new digit
+		calculatedHash = calculatedHash*numOfUniqueChar - encodedSequence[start-1]*numOfUniqueCharToThePowerOfK + encodedSequence[start+sequenceLength-1]
+
+		// if the hash already seen then add the sequence into output, otherwise set the sequence as seen
+		if seenHashes[calculatedHash] {
+			output[s[start:start+sequenceLength]] = true
+		} else {
+			seenHashes[calculatedHash] = true
+		}
+	}
+
+	// add sequence with more than once occurence to the result list
+	result := make([]string, 0, len(output))
+	for seq := range output {
+		result = append(result, seq)
+	}
+
+	return result
+}
