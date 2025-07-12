@@ -62,3 +62,66 @@ func FindDuplicate(nums []int) int {
 
 	return slow
 }
+
+// CircularArrayLoop returns true if such a cycle exists in the list or false otherwise.
+// A cycle in this list means:
+// 1. You keep moving according to the numbers, and you end up repeating a sequence of indexes.
+// 2. All numbers in the cycle have the same sign (either all positive or all negative).
+// 3. The cycle length is greater than 1 (it involves at least two indexes).
+func CircularArrayLoop(nums []int) bool {
+	size := len(nums)
+
+	// check the circular array loop from each element as first pointer
+	for i := range nums {
+		slow, fast := i, i
+		forward := nums[i] > 0
+
+		for {
+			// use fast and slow pointer move to next step for each pointer
+			// slow pointer move one step at a time
+			// fast pointer move two steps at a time
+			// for each step check if the invalid cycle is detected
+			// if detected then break the for loop and continue starting the next element
+			slow = circularArrayLoopNextStep(slow, nums[slow], size)
+			if isInvalidCycle(nums, forward, slow) {
+				break
+			}
+			fast = circularArrayLoopNextStep(fast, nums[fast], size)
+			if isInvalidCycle(nums, forward, fast) {
+				break
+			}
+			fast = circularArrayLoopNextStep(fast, nums[fast], size)
+			if isInvalidCycle(nums, forward, fast) {
+				break
+			}
+
+			// if no invalid cycle detected and fast and slow pointers point to the same elements then we found valid circular array loop
+			if slow == fast {
+				return true
+			}
+		}
+	}
+
+	// if after iterate all elements as first pointer and we still didn't find the circular array loop then return false
+	return false
+}
+
+// circularArrayLoopNextStep returns the next index based on current index, move, and array size of circular array loop
+func circularArrayLoopNextStep(current int, move int, size int) int {
+	result := (current + move) % size
+	if result < 0 {
+		result += size
+	}
+	return result
+}
+
+// isInvalidCycle returns true if invalid cycle detected
+// invalid cycle is when the cycle contains different sign of movement
+// or when the cycle length is equal to 1
+func isInvalidCycle(nums []int, prevDirection bool, current int) bool {
+	currentDirection := nums[current] >= 0
+	if prevDirection != currentDirection || nums[current]%len(nums) == 0 {
+		return true
+	}
+	return false
+}
