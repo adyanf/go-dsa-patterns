@@ -13,7 +13,16 @@ Each package contains two main files:
 ### Available Patterns
 
 -   **Two Pointers**: Problems that can be solved by iterating with two pointers, often from opposite ends of a data structure.
-    -   Location: `/twopointers`
+    -   Location: `/patterns/twopointers`
+
+-   **Sliding Window**: Problems involving finding subarrays or substrings that satisfy certain conditions by maintaining a window that slides over the data.
+    -   Location: `/patterns/slidingwindow`
+
+-   **Fast and Slow Pointers**: Problems that can be solved using two pointers moving at different speeds, commonly used for cycle detection and finding middle elements.
+    -   Location: `/patterns/fastslowpointers`
+
+-   **Merge Intervals**: Problems involving overlapping or adjacent intervals that need to be merged, inserted, or analyzed.
+    -   Location: `/patterns/mergeintervals`
 
 ## Usage
 
@@ -26,5 +35,11 @@ go test -v ./...
 To run tests for a specific package, navigate to that directory or specify the path:
 
 ```sh
-go test -v ./twopointers
+go test -v ./patterns/twopointers
+# or
+go test -v ./patterns/slidingwindow
+# or
+go test -v ./patterns/fastslowpointers
+# or
+go test -v ./patterns/mergeintervals
 ```
