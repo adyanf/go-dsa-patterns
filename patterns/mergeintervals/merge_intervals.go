@@ -1,5 +1,9 @@
 package mergeintervals
 
+import (
+	"sort"
+)
+
 /*
 The Merge Intervals pattern is all about working with time ranges that might overlap.
 Each time range, or interval, is defined by a start and an end point—for example, [10, 20] means the range starts at 10 and ends at 20.
@@ -40,3 +44,38 @@ When to use this pattern:
 The merge intervals pattern typically has O(n log n) time complexity due to sorting,
 and O(1) to O(n) space complexity depending on whether you modify in-place or create new arrays.
 */
+
+// LeastTime calculate the least amount of time unit needed to process tasks
+// with cooling down period n between identical task.
+func LeastInterval(tasks []byte, n int) int {
+	// first find the freqyency of each task, because task represented by uppercase letter we can use array of size 26
+	taskFreqs := make([]int, 26)
+	for _, task := range tasks {
+		taskFreqs[task-'A'] += 1
+	}
+
+	// sort task frequency in descending order
+	sort.Slice(taskFreqs, func(i int, j int) bool {
+		return taskFreqs[i] > taskFreqs[j]
+	})
+
+	// determine the max frequency from the first index of sorted taskFreqs
+	maxFreq := taskFreqs[0]
+
+	// calculate the idle slots from the max frequency - 1 multiplied by cooling down period n
+	// substraction by one is because the first task doesn't need cooling down period
+	idleSlots := (maxFreq - 1) * n
+
+	// substract the idle slots based on the other tasks that could be inserted to idle slots
+	for i := 1; i < 26 && taskFreqs[i] > 0; i++ {
+		idleSlots -= min(maxFreq-1, taskFreqs[i])
+	}
+
+	// idle slots should not be negative
+	if idleSlots < 0 {
+		idleSlots = 0
+	}
+
+	// the least interval is the number of tasks (one task need one time unit for processing) plus the remaining of idle slots
+	return len(tasks) + idleSlots
+}
