@@ -79,3 +79,31 @@ func LeastInterval(tasks []byte, n int) int {
 	// the least interval is the number of tasks (one task need one time unit for processing) plus the remaining of idle slots
 	return len(tasks) + idleSlots
 }
+
+// MergeIntervals merges the overlapping intervals and return only non-overlapping intervals
+func MergeIntervals(intervals [][]int) [][]int {
+	// sort the interval based on the start time
+	sort.Slice(intervals, func(i int, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+
+	// start the result with the first interval
+	result := [][]int{intervals[0]}
+
+	// iterate over the remaining intervals
+	for i := 1; i < len(intervals); i++ {
+		// get the last index of result
+		ri := len(result) - 1
+
+		// if the current interval is overlapped with last index of result intervals,
+		// then update the end time of result interval with max of end time between the two intervals
+		// otherwise if the two interval isn't overlapped, add the current interval to the result
+		if result[ri][1] >= intervals[i][0] {
+			result[ri][1] = max(result[ri][1], intervals[i][1])
+		} else {
+			result = append(result, intervals[i])
+		}
+	}
+
+	return result
+}
