@@ -107,3 +107,35 @@ func MergeIntervals(intervals [][]int) [][]int {
 
 	return result
 }
+
+// InsertInterval inserts the new interval into existing sorted non-overlapping intervals
+// The result should also a sorted non-overlapping intervals with newly added interval
+func InsertInterval(existingIntervals [][]int, newInterval []int) [][]int {
+	var result [][]int
+	i := 0
+
+	// Step 1: Add all intervals that end before newInterval starts
+	for i < len(existingIntervals) && existingIntervals[i][0] < newInterval[0] {
+		result = append(result, existingIntervals[i])
+		i++
+	}
+
+	// Step 2: Merge newInterval if needed
+	if len(result) == 0 || newInterval[0] > result[len(result)-1][1] {
+		result = append(result, newInterval)
+	} else {
+		result[len(result)-1][1] = max(result[len(result)-1][1], newInterval[1])
+	}
+
+	// Step 3: Process remaining intervals
+	for i < len(existingIntervals) {
+		if result[len(result)-1][1] < existingIntervals[i][0] {
+			result = append(result, existingIntervals[i])
+		} else {
+			result[len(result)-1][1] = max(result[len(result)-1][1], existingIntervals[i][1])
+		}
+		i++
+	}
+
+	return result
+}
