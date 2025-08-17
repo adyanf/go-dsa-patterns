@@ -42,35 +42,29 @@ Examples of problems:
 
 // SwapPairs swaps every two adjacent nodes of the linked list and return the head
 func SwapPairs(head *structs.ListNode) *structs.ListNode {
-	// iterate from the head of linked list
-	curr := head
+	// use dummy node to keep track of head changes
+	dummyNode := &structs.ListNode{Val: -1, Next: head}
 
-	// set the previous node as nil
-	var prev *structs.ListNode
+	// set the head as the first iteration and dummy node as the previous node of head
+	currNode := head
+	prevNode := dummyNode
 
 	// start iterating until the end or when the remaining node is only one (couldn't be swapped)
-	for curr != nil && curr.Next != nil {
-		// store the next and nextNext pointer
-		next := curr.Next
-		nextNext := curr.Next.Next
+	for currNode != nil && currNode.Next != nil {
+		// set the first and second node to be swapped
+		firstNode := currNode
+		secondNode := currNode.Next
 
-		// swap the pointer between two adjacent nodes
-		next.Next = curr
-		curr.Next = nextNext
-
-		// if the previous node exist, change it to point to the next node (because it will be positioned in current node place after swap)
-		if prev != nil {
-			prev.Next = next
-		}
-		// if current node is head, then change the head into the next node (because it will be positioned in the head place after swap)
-		if curr == head {
-			head = next
-		}
+		// swap the pointer between two adjacent nodes and set the previous node next as the second node
+		// after the swap the second node will be the next of previous node
+		prevNode.Next = secondNode
+		firstNode.Next = secondNode.Next
+		secondNode.Next = firstNode
 
 		// update the previous node and current node for next iteration
-		prev = curr
-		curr = nextNext
+		prevNode = firstNode
+		currNode = firstNode.Next
 	}
 
-	return head
+	return dummyNode.Next
 }
