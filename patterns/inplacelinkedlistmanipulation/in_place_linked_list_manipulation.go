@@ -1,5 +1,7 @@
 package inplacelinkedlistmanipulation
 
+import "github.com/adyanf/go-dsa-patterns/structs"
+
 /*
 The in-place manipulation of a linked list pattern allows us to modify a linked list without using any additional memory.
 In-place refers to an algorithm that processes or modifies a data structure using only the existing memory space,
@@ -37,3 +39,38 @@ Examples of problems:
 - Merge two sorted lists in-place
 - Rearrange linked list (odd-even positions)
 */
+
+// SwapPairs swaps every two adjacent nodes of the linked list and return the head
+func SwapPairs(head *structs.ListNode) *structs.ListNode {
+	// iterate from the head of linked list
+	curr := head
+
+	// set the previous node as nil
+	var prev *structs.ListNode
+
+	// start iterating until the end or when the remaining node is only one (couldn't be swapped)
+	for curr != nil && curr.Next != nil {
+		// store the next and nextNext pointer
+		next := curr.Next
+		nextNext := curr.Next.Next
+
+		// swap the pointer between two adjacent nodes
+		next.Next = curr
+		curr.Next = nextNext
+
+		// if the previous node exist, change it to point to the next node (because it will be positioned in current node place after swap)
+		if prev != nil {
+			prev.Next = next
+		}
+		// if current node is head, then change the head into the next node (because it will be positioned in the head place after swap)
+		if curr == head {
+			head = next
+		}
+
+		// update the previous node and current node for next iteration
+		prev = curr
+		curr = nextNext
+	}
+
+	return head
+}
