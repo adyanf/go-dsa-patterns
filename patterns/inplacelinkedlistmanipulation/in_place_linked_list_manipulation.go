@@ -68,3 +68,41 @@ func SwapPairs(head *structs.ListNode) *structs.ListNode {
 
 	return dummyNode.Next
 }
+
+// ReverseBetween reverses nodes in a linked list from position 'left' to position 'right' (1-indexed)
+func ReverseBetween(head *structs.ListNode, left int, right int) *structs.ListNode {
+	// check if head is empty or left == right (require no reverse)
+	if head == nil || left == right {
+		return head
+	}
+
+	// use dummy node to keep track of head changes
+	dummyNode := &structs.ListNode{Val: -1, Next: head}
+
+	// find the node just before the 'left' position (call it prevNode)
+	prevNode := dummyNode
+	for i := 1; i < left; i++ {
+		prevNode = prevNode.Next
+	}
+
+	// keep currNode at the 'left' position - this will end up at the 'right' position after reversal
+	currNode := prevNode.Next
+
+	// iterate for right-left times
+	// for each iteration, move the next node after currNode to the front of the reversed section
+	// this effectively reverses the sublist by moving nodes one by one to the beginning
+	// Example: 1->2->3->4->5 with left=2, right=4 becomes 1->4->3->2->5
+	// Initial:     1 -> 2 -> 3 -> 4 -> 5
+	// After iter1: 1 -> 3 -> 2 -> 4 -> 5  (moved 3 to front)
+	// After iter2: 1 -> 4 -> 3 -> 2 -> 5  (moved 4 to front)
+	// Result:      1 -> 4 -> 3 -> 2 -> 5  (positions 2-4 are reversed)
+	for i := 0; i < right-left; i++ {
+		nextNode := currNode.Next
+		currNode.Next = nextNode.Next
+		nextNode.Next = prevNode.Next
+		prevNode.Next = nextNode
+	}
+
+	// return the head of the linked list that is pointed by dummyNode.Next
+	return dummyNode.Next
+}
