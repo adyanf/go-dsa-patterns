@@ -1,6 +1,8 @@
 package inplacelinkedlistmanipulation
 
-import "github.com/adyanf/go-dsa-patterns/structs"
+import (
+	"github.com/adyanf/go-dsa-patterns/structs"
+)
 
 /*
 The in-place manipulation of a linked list pattern allows us to modify a linked list without using any additional memory.
@@ -105,4 +107,47 @@ func ReverseBetween(head *structs.ListNode, left int, right int) *structs.ListNo
 
 	// return the head of the linked list that is pointed by dummyNode.Next
 	return dummyNode.Next
+}
+
+// ReorderList reorders nodes in a linked list by alternating between the first and last nodes
+func ReorderList(head *structs.ListNode) {
+	// check if the head is empty
+	if head == nil {
+		return
+	}
+
+	// get the middle of the linked list using slow and fast pointer
+	// after iteration complete the slow pointer should point to the middle of linked list
+	slow, fast := head, head
+	for fast != nil && fast.Next != nil {
+		slow, fast = slow.Next, fast.Next.Next
+	}
+
+	var prev, tmp *structs.ListNode
+	curr := slow
+
+	// reversing the second half (from the middle) of linked list
+	// this will disconnect the linked list into two
+	// the first one start from the head, and the second one from the prev (after reverse)
+	for curr != nil {
+		tmp = curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = tmp
+	}
+
+	first, second := head, prev
+
+	// stitching the two disconnected linked list, alternating between them
+	// from: 1->2->3->4->5->6
+	// result: 1->6->2->5->3->4
+	for second.Next != nil {
+		tmp := first.Next
+		first.Next = second
+		first = tmp
+
+		tmp = second.Next
+		second.Next = first
+		second = tmp
+	}
 }
